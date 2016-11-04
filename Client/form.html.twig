@@ -1,0 +1,201 @@
+{% form_theme form ':Client:form_theme.html.twig' %}
+{{ form_start(form) }}
+<div class="anketa">
+    <div class="row">
+        <div class="col-sm-4 col-md-3">
+            <div class="form-group anketa-block">
+                <h2>Ваша фотография</h2>
+                <div class="anketa-img-bg-block">
+                    <div class="anketa-img anketa-img-bg">
+                        <img id="image-anketa" src="#" >  
+                    </div>
+                    <div class="file_upload">
+                        <button type="button">Выбрать фотографию</button>
+                        {{ form_widget(form.imageFile) }}
+                    </div>
+                </div>
+            </div>
+            <div class="anketa-block">
+                <div class="form-group">
+                    <div class="form-inn">Необходимо загрузить еще 2 документа <small>(.jpg, .png)</small> * </div>
+                </div>
+                <div class="form-group form-off">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {# {{ form_widget(form.documents) }}   #}
+                            <div class="form-upload form-item-upload">
+                                {% for emailField in form.documents %}
+                                    <div class="file_upload">
+                                        <button type="button">Загрузить</button>
+                                        <div class="file-names">Файл не выбран</div>
+                                        {{ form_widget(emailField) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-9">
+            <div class="form-group anketa-block">
+                <h2>Паспортные данные</h2>
+                <div class="form-group form-none">
+                    {{ form_widget(form.passportType) }}</div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form_widget(form.passport.lastName, {'attr': {'placeholder': 'Фамилия *' }}) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.passport.firstName, {'attr': {'placeholder': 'Имя *' }}) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.passport.patronymic, {'attr': {'placeholder': 'Отчество *' }}) }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-data-cal">
+                               {{ form_widget(form.passport.birthDate, {'attr': {'placeholder': 'Дата рождения *' }}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form_widget(form.passport.passportSeries, {'attr': {'class':'cep','placeholder': 'Серия/Номер *' }}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_widget(form.passport.passportIssuedBy, {'attr': {'placeholder': 'Кем выдан *' }}) }} 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-data-cal">
+                               {{ form_widget(form.passport.passportIssuedDate, {'attr': {'placeholder': 'Дата выдачи *' }}) }} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_widget(form.passport.registrationAddress, {'attr': {'placeholder': 'Адрес регистрации *' }}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-upload">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Скан паспорта, загружать разворот с фотографией и регистрацией <small>(.jpg, .png)</small> *</label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="file_upload">
+                                    <button type="button">Загрузить</button>
+                                    <div class="file-names">Файл не выбран</div>
+                                    {{ form_widget(form.passport.mainImageFile) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="file_upload">
+                                    <button type="button">Загрузить</button>
+                                    <div class="file-names">Файл не выбран</div>
+                                    {{ form_widget(form.passport.addressImageFile) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2>Контактная информация</h2>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_widget(form.address, {'attr': {'placeholder': 'Фактический адрес проживания *' }}) }}  
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12"><label>Указывайте действующий телефон и email для получения решения о регистрации *</label></div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.mobilePhone, {'attr': {'class':'phone','placeholder': 'Мобильный телефон *' }}) }} 
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.homePhone, {'attr': {'placeholder': 'Доп. телефон ' }}) }}   
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.email, {'attr': {'placeholder': 'Email *' }}) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.url, {'attr': {'placeholder': 'Веб-сайт' }}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form_row(form.employmentType) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 off-required">
+                            <div class="row">
+                                {{ form_row(form.employmentDetails) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-off form-whe">
+                    <div class="row">
+                        <div class="col-md-6 form-left">
+                            <div>Cсылки на ваши страницы в социальных сетях и профессиональных базах *</div>
+                            {{ form_widget(form.socialProfiles, {'attr': {'placeholder': 'Профили соц сетей' }}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2>Обязательно укажите откуда вы о нас узнали</h2>
+                </div>
+                <div class="form-group form-off form-bor">
+                    <div class="row">
+                        {# {{ form_widget(form.referrers) }} #}
+                        <div class="col-md-6">
+                            <div>{{ form_widget(form.employmentNewType) }}</div>
+                            <div>{{ form_widget(form.employmentNewDetails, {'attr': {'placeholder': 'А конкретнее - название, имя...' }}) }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>Кто из наших клиентов может Ваc порекомендовать?</div>
+                        {{ form_widget(form.friends, {'attr': {'placeholder': 'Введите ФИО через запятую' }}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">  
+                    <div class="form-subm">
+                        <div class="row">
+                            <div class="col-md-9">
+                                {{ form_widget(form.accept) }}
+                                {{ form_row(form.passportType) }}
+                                {{ form_row(form.passport) }}
+                                {{ form_rest(form) }}
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn-red form-rigth" type="submit">Отправить</button>  
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="part_h">
+                        <h3>Проверка Ваших данных может занять до 5-ти календарных дней</h3>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>  
+{{ form_end(form) }}

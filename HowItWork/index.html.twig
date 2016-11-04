@@ -1,0 +1,386 @@
+{% extends '::base.html.twig' %}
+{% block breadcrumb %}
+{% endblock %}
+{% block content -%}
+    <!-- Help -->
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="nav nav-tabs tovar-list" id="helpTab">
+                {% for entity in entities %}
+                    <li {% if loop.first %}class="active"{% endif %}>
+                        <a class="btn-all" href="#{{ entity.link }}" data-toggle="tab">{{ entity.title }}</a>
+                    </li>
+                {% endfor %}
+                <li><a class="btn-all" data-toggle="tab" href="#question-answer">{{'title.faq'|trans}}</a></li>
+            </ul>
+            <div class="tab-content tab-help">
+                {% for entity in entities %}
+                    <div class="tab-pane {% if loop.first %}active{% endif %}"  id="{{ entity.link }}">
+                        {% if entity.id != 9 %}
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                {% if entity.images[app.request.locale] is defined%}
+                                    {% set img = vich_uploader_asset(entity.images[app.request.locale], 'mainImageFile') %}
+                                    <img class="news-img1" src="{{ img }}" alt="{{ entity.title }}" title="{{ entity.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class=" help-title-up">
+                                    <h2>{{ entity.title }}</h2>
+                                </div>
+                                <div class="help-content">
+                                    {% if entity.preview is not null %}
+                                        {{ entity.preview|raw }}
+                                    {% else %}
+                                        {{ entity.content|raw }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-12">
+                                <div class="help-content-block">
+                                    {% if entity.preview is not null %}
+                                        {{ entity.content|raw }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            {{ render(controller(
+                            'ClientBundle:Client:newPerson'
+                            )) }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <!-- Вопрос-ответ -->
+                <div class="tab-pane" id="question-answer">
+                    <div class="row">
+                        {{ render(controller(
+                        'ContentBundle:Question:index'
+                        )) }}
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <!-- меню разделов -->
+    {{ render(controller(
+    'AppBundle:Catalog:getCatalogMainMenu'
+    )) }}
+{% endblock %}
+{% block inline_stylesheet %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/avanzuadmintheme/vendor/bootflat/css/font-awesome.min.css') }}"  rel="stylesheet">
+    <link href="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/datepicker3.css') }}"  rel="stylesheet">
+{% endblock %}
+{% block inline_javascript %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // при переходе на страницу
+            var hash = window.location.hash;
+            if (hash) {
+                $('[href='+hash+']').tab('show');
+                $('html, body').animate({scrollTop:0}, 'slow');
+            };
+            // на странице
+            $(window).bind('hashchange', function() {
+                if (location.hash) {
+                    $('[href='+location.hash+']').tab('show');
+                    $('html, body').animate({scrollTop:0}, 'slow');
+                };
+            });
+        });
+    </script>
+    <script>
+        $('#question-form').submit(function(e){
+            e.preventDefault();
+            // console.log(e);
+            var values = {};
+            $form = $(this);
+            $.each( $form.serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+            $.ajax({
+                type        : 'POST',
+                url         : '{{ path('question_add') }}',
+                data        : values,
+                success     : function(data) {
+                    $('.form-signin .modal-success').css('display','block');
+                    $('.form-signin .modal-body').css('display','none');
+                    $('.form-signin .modal-footer').css('display','none');
+                },
+                error       : function(xhr)
+                {
+                    $('.form-signin .modal-error').css('display','block');
+                    $('.form-signin .modal-error').html(xhr.responseText);
+                }
+            });
+        });
+    </script>
+    <script src="{{ asset('libs/jquery/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery.maskedinput.min.js') }}"></script>
+    <script src="{{ asset('libs/jquery/jquery.livequery.js') }}"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
+    <script>
+    {# Валидация формы #}
+    $(document).ready(function(){
+    var transYes = "Согласиться",
+        transText = "Заполните поле",
+        transPattern = "Некорректные номер",
+        transEmail = "Некорректный email",
+        transUrl = "Некорректный URL",
+        transDigits = "Только цифры",
+        transMinLength = "Мин кол-во символов ";
+
+    $('#new-person-client form').validate(
+    {
+        rules: 
+            {
+                "client_bundle_person_form[passport][lastName]": {
+                    required: true
+                },"client_bundle_person_form[passport][firstName]": {
+                    required: true
+                },"client_bundle_person_form[passport][patronymic]": {
+                    required: true
+                },"client_bundle_person_form[passport][birthDate]": {
+                    required: true
+                },"client_bundle_person_form[passport][passportSeries]": {
+                    required: true
+                },"client_bundle_person_form[passport][passportIssuedBy]": {
+                    required: true
+                },"client_bundle_person_form[passport][passportIssuedDate]": {
+                    required: true
+                },"client_bundle_person_form[passport][registrationAddress]": {
+                    required: true
+                },"client_bundle_person_form[address]": {
+                    required: true
+                },"client_bundle_person_form[mobilePhone]": {
+                    required: true
+                },"client_bundle_person_form[email]": {
+                    required: true, email: true
+                },"client_bundle_person_form[employmentDetails][job]": {
+                    required: true
+                },"client_bundle_person_form[employmentDetails][position]": {
+                    required: true
+                },"client_bundle_person_form[employmentDetails][phone]": {
+                    required: true, pattern: /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{6,10}$/
+                },"client_bundle_person_form[homePhone]": {
+                    pattern: /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{6,10}$/
+                },"client_bundle_person_form[socialProfiles][0][url]": {
+                    required: true
+                },"client_bundle_person_form[friends]": {
+                    required: true
+                },"client_bundle_person_form[accept]": {
+                    required: true
+                },"client_bundle_person_form[employmentDetails][institution]": {
+                    required: true
+                },"client_bundle_person_form[employmentDetails][program]": {
+                    required: true
+                },"client_bundle_person_form[employmentDetails][year]": {
+                    required: true, digits: true, minlength: 4
+                },"client_bundle_person_form[employmentNewType]": {
+                    required: true
+                },"client_bundle_person_form[employmentNewDetails]": {
+                    required: true
+                },"client_bundle_person_form[passport][mainImageFile][file]": {
+                    required: true, extension: "jpg|png|jpeg"
+                },"client_bundle_person_form[passport][addressImageFile][file]": {
+                    required: true, extension: "jpg|png|jpeg"
+                },"client_bundle_person_form[documents][0][imageFile][file]": {
+                    required: true, extension: "jpg|png|jpeg"
+                },"client_bundle_person_form[documents][1][imageFile][file]": {
+                    required: true, extension: "jpg|png|jpeg"
+                },"client_bundle_person_form[imageFile][file]": {
+                    required: true, extension: "jpg|png|jpeg"
+                }
+            },
+        messages: 
+            {
+                "client_bundle_person_form[passport][lastName]": {
+                        required: transText
+                },"client_bundle_person_form[passport][firstName]": {
+                        required: transText
+                },"client_bundle_person_form[passport][patronymic]": {
+                        required: transText
+                },"client_bundle_person_form[passport][birthDate]": {
+                        required: transText
+                },"client_bundle_person_form[passport][passportSeries]": {
+                        required: transText
+                },"client_bundle_person_form[passport][passportIssuedBy]": {
+                        required: transText
+                },"client_bundle_person_form[passport][passportIssuedDate]": {
+                        required: transText
+                },"client_bundle_person_form[passport][registrationAddress]": {
+                        required: transText
+                },"client_bundle_person_form[address]": {
+                        required: transText
+                },"client_bundle_person_form[mobilePhone]": {
+                        required: transText
+                },"client_bundle_person_form[email]": {
+                        required: transText, email: transEmail
+                },"client_bundle_person_form[employmentDetails][job]": {
+                        required: transText
+                },"client_bundle_person_form[employmentDetails][position]": {
+                        required: transText
+                },"client_bundle_person_form[employmentDetails][phone]": {
+                        required: transText, pattern: transPattern
+                },"client_bundle_person_form[homePhone]": {
+                        pattern: transPattern
+                },"client_bundle_person_form[socialProfiles][0][url]": {
+                        required: transText, url: transUrl
+                },"client_bundle_person_form[friends]": {
+                        required: transText
+                },"client_bundle_person_form[accept]": {
+                        required: transYes
+                },"client_bundle_person_form[employmentDetails][institution]": {
+                        required: transText
+                },"client_bundle_person_form[employmentDetails][program]": {
+                        required: transText
+                },"client_bundle_person_form[employmentDetails][year]": {
+                        required: transText, digits: transDigits, minlength: transMinLength + '4'
+                },"client_bundle_person_form[employmentNewType]": {
+                        required: transText
+                },"client_bundle_person_form[employmentNewDetails]": {
+                        required: transText
+                },"client_bundle_person_form[url]": {
+                        url: transUrl
+                }
+            }
+        });
+        // var tr = "{{'title.name'|trans}}";
+        // Стиль error input file
+        $('.anketa .form-upload .file_upload input[type="file"].error').livequery(function(){
+            $(this).parents('.file_upload').css('border','1px solid #d73925'); 
+        });
+        $('.anketa .form-upload .file_upload input[type="file"].valid').livequery(function(){
+            $(this).parents('.file_upload').css('border','1px solid #7cc0ef'); 
+        });
+        // form select option other
+        $('#client_bundle_person_form_employmentNewType').change(function(){
+            var otherForm = $('#client_bundle_person_form_employmentNewDetails');
+            $(otherForm).hide().removeAttr('required','required').val('');
+            $(this).children().not(':nth-child(1)').not(':nth-child(2)').addClass( "highlight" ).children().addClass( "highlight" );
+            if ($('#client_bundle_person_form_employmentNewType option:selected').hasClass('highlight')) {
+                $(otherForm).show().attr('required','required');
+            }else{
+                $(otherForm).val('-');
+            }  
+        }); 
+    });
+    </script>
+    <script>
+        var $passport = $('#client_bundle_person_form_passportType');
+        var $employType = $('#client_bundle_person_form_employmentType');
+        // When sport gets selected ...
+        $passport.change(function() { // ... retrieve the corresponding form.
+            updateFields($(this), '#client_bundle_person_form_passportType')
+        });
+        $employType.change(function() { // ... retrieve the corresponding form.
+            updateFields($(this), '#client_bundle_person_form_employmentDetails')
+        });
+        function updateFields($field, $fieldId)
+        {
+            var $form = $field.closest('form');
+            var data = {}; // Simulate form data, but only include the selected sport value.
+            data[$field.attr('name')] = $field.val();
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    // Replace current position field ...
+                    $($fieldId).replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(html).find($fieldId)
+                    );
+                    // Position field now displays the appropriate positions.
+                }
+            });
+        }
+    </script>
+    <script>
+        $.datepicker.regional['ru'] = { 
+            closeText: 'Закрыть', 
+            prevText: '&#x3c;Пред', 
+            nextText: 'След&#x3e;', 
+            currentText: 'Сегодня', 
+            monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], 
+            monthNamesShort: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], 
+            dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'], 
+            dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'], 
+            dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'], 
+            firstDay: 1, 
+            isRTL: false 
+        }; 
+        $.datepicker.setDefaults($.datepicker.regional['ru']); 
+        $( function() {
+            $( ".datepicker" ).datepicker({
+                dateFormat: 'dd.mm.yy',
+                yearRange: "-65:+0",
+                changeMonth: true,
+                changeYear: true,
+                beforeShow: function(input, inst) {
+                   $('#ui-datepicker-div').removeClass(function() {
+                       return $('input').get(0).id; 
+                   });
+                   $('#ui-datepicker-div').addClass(this.id);
+               }
+            });
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image-anketa').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#client_bundle_person_form_imageFile_file").change(function(){
+            readURL(this);
+        });
+    </script>
+    <script>
+        $(function(){
+            $(".form-upload .file_upload").each(function(){
+                var wrapper = $( this ),
+                        inp = wrapper.find( "input" ),
+                        btn = wrapper.children( "button" ),
+                        lbl = wrapper.children( ".file-names" );
+                btn.focus(function(){
+                    inp.focus()
+                });
+                // Crutches for the :focus style:
+                inp.focus(function(){
+                    wrapper.addClass( "focus" );
+                }).blur(function(){
+                    wrapper.removeClass( "focus" );
+                });
+                var file_api = ( window.File && window.FileReader && window.FileList && window.Blob ) ? true : false;
+                inp.change(function(){
+                    var file_name;
+                    if( file_api && inp[ 0 ].files[ 0 ] )
+                        file_name = inp[ 0 ].files[ 0 ].name;
+                    else
+                        file_name = inp.val().replace( "C:\\fakepath\\", '' );
+
+                    if( ! file_name.length )
+                        return;
+
+                    if( lbl.is( ":visible" ) ){
+                        lbl.text( file_name );
+                        // btn.text( "Выбрать" );
+                    }else
+                        btn.text( file_name );
+                }).change();
+            });
+        });
+        $( window ).resize(function(){$( ".file_upload input" ).triggerHandler( "change" );});
+        $('.phone').mask("+7 (999) 999-99-99");
+        $('.cep').mask("9999 999999");
+        $('#client_bundle_person_form_passport_birthDate, #client_bundle_person_form_passport_passportIssuedDate').mask("99.99.9999");
+    </script>
+{% endblock %}

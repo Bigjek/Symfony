@@ -1,0 +1,54 @@
+{% block study_employ_widget %}
+    <div id="client_bundle_person_form_employmentDetails">
+        {# <div class="row"> #}
+            <div class="col-md-3">
+                {{ form_widget(form.institution, {'attr': {'placeholder': 'Место учёбы' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.program, {'attr': {'placeholder': 'Направление обучения' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.year, {'attr': {'placeholder': 'Год выпуска' }}) }}
+            </div>
+        {# </div> #}
+    </div>
+{% endblock %}
+{% block work_employ_widget %}
+    <div id="client_bundle_person_form_employmentDetails">
+        {# <div class="row"> #}
+            <div class="col-md-3">
+                {{ form_widget(form.job, {'attr': {'placeholder': 'Место работы' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.position, {'attr': {'placeholder': 'Должность' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.phone, {'attr': {'placeholder': 'Рабочий телефон' }}) }}
+            </div>
+        {# </div> #}
+    </div>
+{% endblock %}
+{% block studywork_employ_widget %}
+    <div id="client_bundle_person_form_employmentDetails">
+        {# <div class="row"> #}
+            <div class="col-md-3">
+                {{ form_widget(form.job, {'attr': {'placeholder': 'Место работы' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.position, {'attr': {'placeholder': 'Должность' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.phone, {'attr': {'placeholder': 'Рабочий телефон' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.institution, {'attr': {'placeholder': 'Место учёбы' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.program, {'attr': {'placeholder': 'Направление обучения' }}) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_widget(form.year, {'attr': {'placeholder': 'Год выпуска' }}) }}
+            </div>
+        {# </div> #}
+    </div>
+{% endblock %}
