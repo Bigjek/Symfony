@@ -3,7 +3,8 @@
 
 
 В первом Entity создаем переменную $bookings, добавляем функцию __construct(), создаем ArrayCollection() и добавляем гетеры и сетеры
-    /**
+   
+   /**
      * @ORM\OneToMany(
      *     targetEntity="ClientBundle\Entity\Booking",
      *     mappedBy="client",
@@ -11,6 +12,7 @@
      *     orphanRemoval=true
      *     )
      */
+     
     private $bookings;
     
     public function __construct()
